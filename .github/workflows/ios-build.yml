@@ -30,5 +30,19 @@ jobs:
             -scheme RoadMirror \
             -sdk iphonesimulator \
             -configuration Debug \
+            -derivedDataPath build \
             CODE_SIGNING_ALLOWED=NO \
             build
+
+      - name: Package simulator app
+        run: |
+          cd build/Build/Products/Debug-iphonesimulator
+          zip -r "$GITHUB_WORKSPACE/RoadMirror-Simulator.zip" RoadMirror.app
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: RoadMirror-iOS-Simulator
+          path: RoadMirror-Simulator.zip
+          if-no-files-found: error
+          retention-days: 7
